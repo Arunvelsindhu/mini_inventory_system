@@ -10,7 +10,8 @@ import {
     FaBoxOpen,
     FaExclamationTriangle,
     FaTags,
-    FaRupeeSign
+    FaRupeeSign,
+    FaSyncAlt
 } from "react-icons/fa";
 
 function Dashboard() {
@@ -25,6 +26,20 @@ function Dashboard() {
     });
 
     const [products, setProducts] = useState([]);
+
+    const today = new Date().toLocaleDateString("en-IN", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+    const hour = new Date().getHours();
+
+    let greeting = "Good Evening";
+
+    if (hour < 12) greeting = "Good Morning";
+    else if (hour < 17) greeting = "Good Afternoon";
 
     useEffect(() => {
         loadDashboard();
@@ -57,20 +72,16 @@ function Dashboard() {
             ]);
 
             setStats({
-
                 totalProducts: totalProducts.data.total,
                 lowStock: lowStock.data.total,
                 totalCategories: categories.data.total,
                 inventoryValue: inventory.data.total || 0
-
             });
 
             setProducts(productList.data);
 
         } catch (err) {
-
             console.log(err);
-
         }
 
     };
@@ -83,13 +94,19 @@ function Dashboard() {
 
             <div className="content">
 
-                {/* ===========================
-                    Navbar
-                =========================== */}
+                {/* Navbar */}
 
                 <div className="navbar">
 
-                    <h2>Dashboard</h2>
+                    <div>
+
+                        <h2>Inventory Dashboard</h2>
+
+                        <p className="dashboard-date">
+                            {today}
+                        </p>
+
+                    </div>
 
                     <div className="navbar-right">
 
@@ -99,10 +116,18 @@ function Dashboard() {
 
                             <input
                                 type="text"
-                                placeholder="Search..."
+                                placeholder="Search Products..."
                             />
 
                         </div>
+
+                        <button
+                            className="refresh-btn"
+                            onClick={loadDashboard}
+                        >
+                            <FaSyncAlt />
+                            &nbsp; Refresh
+                        </button>
 
                         <button className="notification-btn">
 
@@ -132,21 +157,33 @@ function Dashboard() {
 
                 </div>
 
-                {/* ===========================
-                    Welcome
-                =========================== */}
+                {/* Welcome */}
 
                 <div className="welcome">
 
-                    <h1>👋 Welcome, {user.username}</h1>
+                    <h1>
+                        {greeting}, {user.username} 👋
+                    </h1>
 
-                    <p>Role : {user.role}</p>
+                    <p>
+                        Welcome back! Here's today's inventory overview.
+                    </p>
+
+                    <div className="status-container">
+
+                        <span className="status-badge role-badge">
+                            {user.role}
+                        </span>
+
+                        <span className="status-badge">
+                            {today}
+                        </span>
+
+                    </div>
 
                 </div>
 
-                {/* ===========================
-                    Dashboard Cards
-                =========================== */}
+                {/* Cards */}
 
                 <div className="cards">
 
@@ -162,6 +199,8 @@ function Dashboard() {
 
                         <h1>{stats.totalProducts}</h1>
 
+                        <p>Available Products</p>
+
                     </div>
 
                     <div className="card orange-card">
@@ -176,6 +215,8 @@ function Dashboard() {
 
                         <h1>{stats.lowStock}</h1>
 
+                        <p>Need Restocking</p>
+
                     </div>
 
                     <div className="card purple-card">
@@ -189,6 +230,8 @@ function Dashboard() {
                         </div>
 
                         <h1>{stats.totalCategories}</h1>
+
+                        <p>Product Categories</p>
 
                     </div>
 
@@ -206,15 +249,17 @@ function Dashboard() {
                             ₹ {Number(stats.inventoryValue).toLocaleString("en-IN")}
                         </h1>
 
+                        <p>Total Inventory Worth</p>
+
                     </div>
 
                 </div>
 
-                {/* ===========================
-                    Charts
-                =========================== */}
+                {/* Charts */}
 
-                <DashboardCharts products={products} />
+                <DashboardCharts
+                    products={products}
+                />
 
             </div>
 
