@@ -1,25 +1,59 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
     FaHome,
     FaBoxOpen,
-    FaSignOutAlt
+    FaSignOutAlt,
+    FaUserCircle
 } from "react-icons/fa";
 
 function Sidebar() {
+
+    const navigate = useNavigate();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const handleLogout = () => {
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/");
+
+    };
 
     return (
 
         <div className="sidebar">
 
+            {/* Logo */}
+
             <div className="sidebar-logo">
 
                 <h2>📦 InventoryPro</h2>
 
+                <p>Inventory Management System</p>
+
             </div>
 
+            {/* User */}
+
+            <div className="sidebar-user">
+
+                <FaUserCircle className="user-icon" />
+
+                <h3>{user?.username}</h3>
+
+                <span>{user?.role}</span>
+
+            </div>
+
+            {/* Menu */}
+
             <p className="menu-title">
+
                 MAIN MENU
+
             </p>
 
             <ul>
@@ -60,18 +94,26 @@ function Sidebar() {
 
             </ul>
 
+            {/* Footer */}
+
             <div className="logout-section">
 
-                <NavLink
-                    to="/"
-                    className="logout-link"
+                <button
+                    className="logout-btn"
+                    onClick={handleLogout}
                 >
 
                     <FaSignOutAlt className="menu-icon" />
 
-                    <span>Logout</span>
+                    Logout
 
-                </NavLink>
+                </button>
+
+                <p className="version">
+
+                    Version 1.0
+
+                </p>
 
             </div>
 
