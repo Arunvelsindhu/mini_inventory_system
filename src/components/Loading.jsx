@@ -1,4 +1,5 @@
 import "../styles/Loading.css";
+import { FaBoxes } from "react-icons/fa";
 
 function Loading() {
 
@@ -6,9 +7,27 @@ function Loading() {
 
         <div className="loading-container">
 
-            <div className="loader"></div>
+            <div className="loading-card">
 
-            <p>Loading...</p>
+                <div className="loading-logo">
+
+                    <FaBoxes />
+
+                </div>
+
+                <div className="spinner"></div>
+
+                <h2>InventoryPro</h2>
+
+                <p>Loading Dashboard...</p>
+
+                <div className="loading-bar">
+
+                    <div className="loading-progress"></div>
+
+                </div>
+
+            </div>
 
         </div>
 
